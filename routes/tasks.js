@@ -1,14 +1,14 @@
 import express from 'express';
-import { connectToMongoDB } from '../db/db.js';
+import { getCollection } from '../db/db.js';
 import { ObjectId } from 'mongodb';
+import { collections } from '../utils/constants.js';
 
 const router = express.Router()
 
 router.route('/')
     .post( async (req, res) => {
       try{
-        const db = await connectToMongoDB()
-        const tasksCollection = db.collection('tasks');
+        const tasksCollection = await getCollection(collections.TASKS)
         const result = await tasksCollection.insertOne(req.body);
         res.json(result);
       }catch (error) {
@@ -18,9 +18,8 @@ router.route('/')
     })
     .get( async (req, res) => {
         try{
-            const db = await connectToMongoDB();
-            const usersCollection = db.collection('tasks');
-            const tasks = await usersCollection.find().toArray();
+            const tasksCollection = await getCollection(collections.TASKS)
+            const tasks = await tasksCollection.find().toArray();
             res.json(tasks)
         }catch (error) {
           console.error('Error tasks:', error.message);
@@ -32,8 +31,7 @@ router.route('/')
     router.route('/:id')
     .put( async(req, res) => {
         const itemId = req.params.id;
-        const db = await connectToMongoDB();
-        const collection = db.collection('tasks');
+        const collection = await getCollection(collections.TASKS)
         const objectId = new ObjectId(itemId)
 
         const result = await collection.updateOne({ _id: objectId }, { $set: req.body});
@@ -47,8 +45,7 @@ router.route('/')
     .delete( async(req, res) => {
         const itemId = req.params.id;
         try {
-            const db = await connectToMongoDB();
-            const collection = db.collection('tasks');
+            const collection = await getCollection(collections.TASKS)
             const objectId = new ObjectId(itemId)
 
             // Delete the item with the specified ID
