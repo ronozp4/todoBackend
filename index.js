@@ -8,7 +8,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({ origin: 'http://10.0.2.2:8081' }));
+app.use(cors({ origin: 'http://10.0.2.2:8081' })); // Your ip address instead of '10.0.2.2'
 
 app.use(express.json());
 
