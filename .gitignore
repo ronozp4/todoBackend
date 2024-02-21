@@ -73,7 +73,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-# not adding .env just for this project submit
+# not adding .env to requirements just for this project submit
 #.env
 .env.development.local
 .env.test.local
